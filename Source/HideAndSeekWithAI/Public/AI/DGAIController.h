@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BTAsset;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+	FName SpawnBBKeyName;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FGenericTeamId TeamId;

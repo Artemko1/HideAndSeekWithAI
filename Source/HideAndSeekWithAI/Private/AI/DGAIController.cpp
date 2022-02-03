@@ -5,7 +5,10 @@
 
 #include "DGCoreTypes.h"
 #include "AI/DGAIPerceptionComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogDGAIController, All, All)
 
 ADGAIController::ADGAIController()
 {
@@ -18,7 +21,18 @@ ADGAIController::ADGAIController()
 void ADGAIController::BeginPlay()
 {
 	Super::BeginPlay();
+
 	RunBehaviorTree(BTAsset);
+
+	if (GetBlackboardComponent() && GetPawn())
+	{
+		if (SpawnBBKeyName.IsNone())
+		{
+			UE_LOG(LogDGAIController, Warning, TEXT("SpawnBBKeyName is set to None"));
+		}
+
+		GetBlackboardComponent()->SetValueAsVector(SpawnBBKeyName, GetPawn()->GetActorLocation());
+	}
 }
 
 ETeamAttitude::Type ADGAIController::GetTeamAttitudeTowards(const AActor& Other) const

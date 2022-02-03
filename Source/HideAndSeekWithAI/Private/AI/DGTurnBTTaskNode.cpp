@@ -9,7 +9,7 @@
 
 UDGTurnBTTaskNode::UDGTurnBTTaskNode()
 {
-	NodeName = "LookAround";
+	NodeName = "TurnAround";
 	bNotifyTick = true;
 	TurnSpeed = 30.f;
 	TurnAngle = 90.f;
