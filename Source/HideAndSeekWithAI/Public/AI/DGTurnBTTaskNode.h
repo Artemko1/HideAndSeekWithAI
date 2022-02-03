@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "DGTurnBTTaskNode.generated.h"
 
 UCLASS()
-class HIDEANDSEEKWITHAI_API UDGTurnBTTaskNode : public UBTTask_BlackboardBase
+class HIDEANDSEEKWITHAI_API UDGTurnBTTaskNode : public UBTTaskNode
 {
 	GENERATED_BODY()
 
