@@ -12,6 +12,7 @@ ADGAICharacter::ADGAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	check(GetCapsuleComponent())
 	GetCapsuleComponent()->InitCapsuleSize(25.f, 50.0f);
 
 	AIControllerClass = ADGAIController::StaticClass();
@@ -20,11 +21,10 @@ ADGAICharacter::ADGAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 	ADGCharacter::SetGenericTeamId(FGenericTeamId(static_cast<uint8>(EDGTeams::Bots)));
 
 	bUseControllerRotationYaw = false;
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-		GetCharacterMovement()->RotationRate = FRotator{0.f, 200.f, 0.f};
-	}
+
+	check(GetCharacterMovement())
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->RotationRate = FRotator{0.f, 200.f, 0.f};
 }
 
 void ADGAICharacter::Tick(float DeltaTime)

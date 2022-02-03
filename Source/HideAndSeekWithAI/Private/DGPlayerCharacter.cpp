@@ -10,6 +10,7 @@
 ADGPlayerCharacter::ADGPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	check(CameraComponent)
 	CameraComponent->SetupAttachment(GetCapsuleComponent());
 	CameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 50.f));
 	CameraComponent->bUsePawnControlRotation = true;

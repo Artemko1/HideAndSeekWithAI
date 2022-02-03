@@ -13,8 +13,11 @@ ADGCharacter::ADGCharacter(const FObjectInitializer& ObjectInitializer): Super(
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	check(GetCapsuleComponent())
 	GetCapsuleComponent()->InitCapsuleSize(25.f, 50.0f);
+
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
+	check(StaticMeshComponent)
 	StaticMeshComponent->SetupAttachment(GetCapsuleComponent());
 	StaticMeshComponent->SetOwnerNoSee(true);
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -23,7 +26,7 @@ ADGCharacter::ADGCharacter(const FObjectInitializer& ObjectInitializer): Super(
 void ADGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	SetMaxSpeed();
 }
 

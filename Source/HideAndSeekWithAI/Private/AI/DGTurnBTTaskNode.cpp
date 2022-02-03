@@ -15,16 +15,19 @@ UDGTurnBTTaskNode::UDGTurnBTTaskNode()
 	TurnAngle = 90.f;
 	TurnSpeedDeviation = 0.f;
 	TurnAngleDeviation = 0.f;
+
+	// Пытался использовать NodeMemory, но видимо из-за размера в uint8 память не смогла поместить в себя 4 параметра и поэтому
+	// периодически крашила игру при запуске (при чём не смотря на null-check!).
+	// Так же инстанс-меш поля зрения почему-то не обновлялся при повороте персонажа без этой настройки, что интересно.
+	bCreateNodeInstance = true;
 }
 
 EBTNodeResult::Type UDGTurnBTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	FDGTurnBTTaskMemory* MyMemory = (FDGTurnBTTaskMemory*)NodeMemory;
-
-	MyMemory->TargetTurnSpeed = FMath::FRandRange(FMath::Max(0.0f, TurnSpeed - TurnSpeedDeviation), (TurnSpeed + TurnSpeedDeviation));
-	MyMemory->TargetTurnAngle = FMath::FRandRange(FMath::Max(0.0f, TurnAngle - TurnAngleDeviation), (TurnAngle + TurnAngleDeviation));
-	MyMemory->ElapsedTurn = 0;
-	MyMemory->TargetDirectionIsRight = IsRandomDirection ? FMath::RandBool() : IsRotatingRight;
+	TargetTurnSpeed = FMath::FRandRange(FMath::Max(0.0f, TurnSpeed - TurnSpeedDeviation), (TurnSpeed + TurnSpeedDeviation));
+	TargetTurnAngle = FMath::FRandRange(FMath::Max(0.0f, TurnAngle - TurnAngleDeviation), (TurnAngle + TurnAngleDeviation));
+	TargetDirectionIsRight = IsRandomDirection ? FMath::RandBool() : IsRotatingRight;
+	ElapsedTurn = 0;
 
 	return EBTNodeResult::InProgress;
 }
@@ -35,27 +38,28 @@ void UDGTurnBTTaskNode::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	if (!AIController)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
 	const auto Pawn = AIController->GetPawn();
 	if (!Pawn)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
-	FDGTurnBTTaskMemory* MyMemory = (FDGTurnBTTaskMemory*)NodeMemory;
-
 	FRotator Rotation = AIController->GetControlRotation();
-	const float Delta = DeltaSeconds * MyMemory->TargetTurnSpeed;
+	const float Delta = DeltaSeconds * TargetTurnSpeed;
 
-	MyMemory->TargetDirectionIsRight ? Rotation.Yaw += Delta : Rotation.Yaw -= Delta;
-	MyMemory->ElapsedTurn += Delta;
+	TargetDirectionIsRight ? Rotation.Yaw += Delta : Rotation.Yaw -= Delta;
+	ElapsedTurn += Delta;
 
 	Pawn->SetActorRotation(Rotation);
 
-	if (MyMemory->ElapsedTurn >= MyMemory->TargetTurnAngle)
+	if (ElapsedTurn >= TargetTurnAngle)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::InProgress);

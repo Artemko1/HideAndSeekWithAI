@@ -37,8 +37,11 @@ void UDGFindEnemyBTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	//todo remove debug code
 	for (const auto HostileActor : HostileActors)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Cyan,
-		                                 FString::Printf(TEXT("%s sees %s"), *Pawn->GetName(), *HostileActor->GetName()));
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Cyan,
+										 FString::Printf(TEXT("%s sees %s"), *Pawn->GetName(), *HostileActor->GetName()));
+		}
 	}
 
 	AActor* Enemy = nullptr;

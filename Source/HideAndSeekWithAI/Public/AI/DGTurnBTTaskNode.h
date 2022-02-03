@@ -7,16 +7,6 @@
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "DGTurnBTTaskNode.generated.h"
 
-struct FDGTurnBTTaskMemory
-{
-	float TargetTurnSpeed = 0;
-	float TargetTurnAngle = 0;
-	bool TargetDirectionIsRight = true;
-
-	/** How much from TargetTurnAngle Pawn already turned */
-	float ElapsedTurn = 0;
-};
-
 UCLASS()
 class HIDEANDSEEKWITHAI_API UDGTurnBTTaskNode : public UBTTask_BlackboardBase
 {
@@ -49,4 +39,12 @@ private:
 
 	UPROPERTY(Category = LookAround, EditAnywhere, meta = (EditCondition = "!IsRandomDirection"))
 	bool IsRotatingRight = true;
+
+
+	float TargetTurnSpeed = 0;
+	float TargetTurnAngle = 0;
+	bool TargetDirectionIsRight = true;
+
+	/** How much from TargetTurnAngle Pawn already turned */
+	float ElapsedTurn = 0;
 };
