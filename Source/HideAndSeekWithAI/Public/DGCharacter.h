@@ -46,13 +46,12 @@ protected:
 	void DropItem();
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	void ThrowItem();
+	void ThrowItem(float Force);
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	bool IsHoldingItem() { return HeldItem != nullptr; }
+	bool IsHoldingItem() const { return HeldItem != nullptr; }
 
 	void SetMaxSpeed() const;
-
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")

@@ -26,3 +26,9 @@ void AItem::Detach()
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	StaticMeshComponent->SetSimulatePhysics(true);
 }
+
+void AItem::AddImpulse(const float Force) const
+{
+	// Reference values are from 600 to 3000 for 1m to 15m throw 
+	StaticMeshComponent->AddImpulse(GetActorForwardVector() * Force, NAME_None, true);
+}

@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogDGPlayerCharacter, Display, All);
+
 ADGPlayerCharacter::ADGPlayerCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
@@ -18,12 +20,24 @@ ADGPlayerCharacter::ADGPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	ADGCharacter::SetGenericTeamId(FGenericTeamId(static_cast<uint8>(EDGTeams::Players)));
 }
 
+void ADGPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (ItemMaxThrowForce < ItemMinThrowForce)
+	{
+		UE_LOG(LogDGPlayerCharacter, Warning, TEXT("ItemMaxThrowForce is less then ItemMinThrowForce"));
+	}
+}
+
 void ADGPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	check(InputComponent);
 
 	PlayerInputComponent->BindAction("TryPickupItem", IE_Pressed, this, &ADGPlayerCharacter::TryPickupItem);
 	PlayerInputComponent->BindAction("DropItem", IE_Pressed, this, &ADGPlayerCharacter::DropItem);
+	PlayerInputComponent->BindAction("ThrowItem", IE_Pressed, this, &ADGPlayerCharacter::ChargeThrow);
+	PlayerInputComponent->BindAction("ThrowItem", IE_Released, this, &ADGPlayerCharacter::ReleaseThrow);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ADGPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ADGPlayerCharacter::MoveRight);
@@ -45,6 +59,28 @@ void ADGPlayerCharacter::MoveRight(const float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void ADGPlayerCharacter::ChargeThrow()
+{
+	if (IsHoldingItem())
+	{
+		GetWorldTimerManager().SetTimer(ChargeThrowTimerHandle, this, &ADGPlayerCharacter::ReleaseThrow, ItemThrowMaxChargeTime, false);
+	}
+}
+
+void ADGPlayerCharacter::ReleaseThrow()
+{
+	if (!IsHoldingItem() || !GetWorldTimerManager().IsTimerActive(ChargeThrowTimerHandle))
+	{
+		return;
+	}
+
+	const float ElapsedPercentTime = GetWorldTimerManager().GetTimerElapsed(ChargeThrowTimerHandle) / ItemThrowMaxChargeTime;
+	GetWorldTimerManager().ClearTimer(ChargeThrowTimerHandle);
+
+	const float ResultForce = FMath::Lerp(ItemMinThrowForce, ItemMaxThrowForce, ElapsedPercentTime);
+	ThrowItem(ResultForce);
 }
 
 void ADGPlayerCharacter::TryPickupItem()

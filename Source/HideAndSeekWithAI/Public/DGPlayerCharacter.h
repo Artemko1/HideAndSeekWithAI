@@ -14,17 +14,32 @@ public:
 	explicit ADGPlayerCharacter(const FObjectInitializer& ObjectInitializer);
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0, UIMin = 0))
 	float ItemPickupRange = 350.f;
 
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0, UIMin = 0))
+	float ItemMinThrowForce = 600.f;
 
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0, UIMin = 0))
+	float ItemMaxThrowForce = 3000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0, UIMin = 0))
+	float ItemThrowMaxChargeTime = 2.f;
+
+	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
+
+	FTimerHandle ChargeThrowTimerHandle;
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+
+	void ChargeThrow();
+	void ReleaseThrow();
 
 	void TryPickupItem();
 };

@@ -16,6 +16,7 @@ public:
 
 	void Attach(UStaticMeshComponent* Parent, const FName& SocketName);
 	void Detach();
+	void AddImpulse(float Force) const;
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")

@@ -52,8 +52,16 @@ void ADGCharacter::DropItem()
 	HeldItem = nullptr;
 }
 
-void ADGCharacter::ThrowItem()
+void ADGCharacter::ThrowItem(const float Force)
 {
+	if (!IsHoldingItem())
+	{
+		return;
+	}
+
+	HeldItem->Detach();
+	HeldItem->AddImpulse(Force);
+	HeldItem = nullptr;
 }
 
 void ADGCharacter::SetMaxSpeed() const
