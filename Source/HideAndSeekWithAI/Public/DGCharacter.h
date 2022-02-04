@@ -24,9 +24,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
 	FName ItemSocketName = "ItemSocket";
-	
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Item")
-	AItem* HeldItem;
+
 
 	virtual void BeginPlay() override;
 
@@ -50,6 +48,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	void ThrowItem();
 
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	bool IsHoldingItem() { return HeldItem != nullptr; }
+
 	void SetMaxSpeed() const;
 
 
@@ -60,6 +61,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float BaseSpeedMultiplier = 1.f;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "Item")
+	AItem* HeldItem;
 
 	float BaseSpeed = 500.f;
 };

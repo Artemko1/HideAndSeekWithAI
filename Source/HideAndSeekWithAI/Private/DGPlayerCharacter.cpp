@@ -50,7 +50,7 @@ void ADGPlayerCharacter::MoveRight(const float Value)
 void ADGPlayerCharacter::TryPickupItem()
 {
 	const auto MyController = GetController();
-	if (!MyController || HeldItem || !GetWorld())
+	if (!MyController || IsHoldingItem() || !GetWorld())
 	{
 		return;
 	}

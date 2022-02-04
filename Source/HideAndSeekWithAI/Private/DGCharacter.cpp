@@ -32,7 +32,7 @@ void ADGCharacter::BeginPlay()
 
 void ADGCharacter::PickupItem(AItem* Item)
 {
-	if (!Item || HeldItem)
+	if (!Item || IsHoldingItem())
 	{
 		return;
 	}
@@ -43,7 +43,7 @@ void ADGCharacter::PickupItem(AItem* Item)
 
 void ADGCharacter::DropItem()
 {
-	if (!HeldItem)
+	if (!IsHoldingItem())
 	{
 		return;
 	}
