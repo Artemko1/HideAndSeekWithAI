@@ -39,7 +39,7 @@ void UDGFindEnemyBTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Cyan,
+			GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Cyan,
 										 FString::Printf(TEXT("%s sees %s"), *Pawn->GetName(), *HostileActor->GetName()));
 		}
 	}

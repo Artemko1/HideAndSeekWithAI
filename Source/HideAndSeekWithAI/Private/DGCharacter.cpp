@@ -30,6 +30,32 @@ void ADGCharacter::BeginPlay()
 	SetMaxSpeed();
 }
 
+void ADGCharacter::PickupItem(AItem* Item)
+{
+	if (!Item || HeldItem)
+	{
+		return;
+	}
+
+	Item->Attach(StaticMeshComponent, ItemSocketName);
+	HeldItem = Item;
+}
+
+void ADGCharacter::DropItem()
+{
+	if (!HeldItem)
+	{
+		return;
+	}
+
+	HeldItem->Detach();
+	HeldItem = nullptr;
+}
+
+void ADGCharacter::ThrowItem()
+{
+}
+
 void ADGCharacter::SetMaxSpeed() const
 {
 	if (GetCharacterMovement())

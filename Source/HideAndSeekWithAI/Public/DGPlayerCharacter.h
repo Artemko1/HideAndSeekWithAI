@@ -14,6 +14,9 @@ public:
 	explicit ADGPlayerCharacter(const FObjectInitializer& ObjectInitializer);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	float ItemPickupRange = 350.f;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 	void MoveForward(float Value);
@@ -22,4 +25,6 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
+
+	void TryPickupItem();
 };

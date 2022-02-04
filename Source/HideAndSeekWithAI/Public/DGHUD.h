@@ -6,7 +6,6 @@
 #include "GameFramework/HUD.h"
 #include "DGHUD.generated.h"
 
-/// Simple implementation taken from 1st person template
 UCLASS()
 class HIDEANDSEEKWITHAI_API ADGHUD : public AHUD
 {
@@ -15,6 +14,5 @@ public:
 	virtual void DrawHUD() override;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category="HUD")
-	UTexture2D* CrosshairTex;
+	void DrawCrossHair();
 };

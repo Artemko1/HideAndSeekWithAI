@@ -22,6 +22,9 @@ void ADGPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	check(InputComponent);
 
+	PlayerInputComponent->BindAction("TryPickupItem", IE_Pressed, this, &ADGPlayerCharacter::TryPickupItem);
+	PlayerInputComponent->BindAction("DropItem", IE_Pressed, this, &ADGPlayerCharacter::DropItem);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ADGPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ADGPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -42,4 +45,40 @@ void ADGPlayerCharacter::MoveRight(const float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void ADGPlayerCharacter::TryPickupItem()
+{
+	const auto MyController = GetController();
+	if (!MyController || HeldItem || !GetWorld())
+	{
+		return;
+	}
+
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	MyController->GetPlayerViewPoint(ViewLocation, ViewRotation);
+
+	const FVector LookDirection = ViewRotation.Vector();
+	const FVector EndOffset = LookDirection * ItemPickupRange;
+	const FVector TraceEnd = ViewLocation + EndOffset;
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(GetOwner());
+	GetWorld()->LineTraceSingleByChannel(HitResult, ViewLocation, TraceEnd, ECC_Visibility, CollisionParams);
+
+	if (!HitResult.bBlockingHit)
+	{
+		return;
+	}
+
+	AItem* HitItem = Cast<AItem>(HitResult.GetActor());
+
+	if (!HitItem)
+	{
+		return;
+	}
+
+	PickupItem(HitItem);
 }

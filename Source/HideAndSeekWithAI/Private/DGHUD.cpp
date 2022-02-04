@@ -3,25 +3,24 @@
 
 #include "DGHUD.h"
 #include "Engine/Canvas.h"
-#include "Engine/Texture2D.h"
-#include "TextureResource.h"
-#include "CanvasItem.h"
 
 void ADGHUD::DrawHUD()
 {
 	Super::DrawHUD();
+	DrawCrossHair();
+}
 
-	if (CrosshairTex == nullptr || CrosshairTex->Resource == nullptr)
-	{
-		return;
-	}
+void ADGHUD::DrawCrossHair()
+{
+	const FVector2D Center(Canvas->SizeX * 0.5f, Canvas->SizeY * 0.5f);
 
-	const FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
+	constexpr float LineSize = 6.0f;
+	constexpr float Offset = 6.0f;
+	constexpr float LineThickness = 1.0f;
+	const FLinearColor LineColor = FLinearColor::Green;
 
-	// offset by half the texture's dimensions so that the center of the texture aligns with the center of the Canvas
-	const FVector2D CrosshairDrawPosition(Center.X, Center.Y + 20.0f);
-
-	FCanvasTileItem TileItem(CrosshairDrawPosition, CrosshairTex->Resource, FLinearColor::White);
-	TileItem.BlendMode = SE_BLEND_Translucent;
-	Canvas->DrawItem(TileItem);
+	DrawLine(Center.X - Offset, Center.Y, Center.X - Offset - LineSize, Center.Y, LineColor, LineThickness);
+	DrawLine(Center.X + Offset, Center.Y, Center.X + Offset + LineSize, Center.Y, LineColor, LineThickness);
+	DrawLine(Center.X, Center.Y - Offset, Center.X, Center.Y - Offset - LineSize, LineColor, LineThickness);
+	DrawLine(Center.X, Center.Y + Offset, Center.X, Center.Y + Offset + LineSize, LineColor, LineThickness);
 }

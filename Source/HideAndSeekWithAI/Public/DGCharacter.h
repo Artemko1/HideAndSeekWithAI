@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
+#include "Item.h"
 #include "DGCharacter.generated.h"
 
 class UCameraComponent;
@@ -16,7 +17,17 @@ class HIDEANDSEEKWITHAI_API ADGCharacter : public ACharacter, public IGenericTea
 public:
 	explicit ADGCharacter(const FObjectInitializer& ObjectInitializer);
 
+
 protected:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	FName ItemSocketName = "ItemSocket";
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	AItem* HeldItem;
+
 	virtual void BeginPlay() override;
 
 	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override
@@ -29,20 +40,26 @@ protected:
 		return TeamId;
 	}
 
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void PickupItem(AItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void DropItem();
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void ThrowItem();
+
 	void SetMaxSpeed() const;
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FGenericTeamId TeamId = FGenericTeamId::NoTeam;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
-	UStaticMeshComponent* StaticMeshComponent;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float BaseSpeedMultiplier = 1.f;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Item")
-	USceneComponent* HeldItemLocation;
 
 	float BaseSpeed = 500.f;
 };
