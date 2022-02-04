@@ -34,15 +34,16 @@ void ADGPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	check(InputComponent);
 
-	PlayerInputComponent->BindAction("TryPickupItem", IE_Pressed, this, &ADGPlayerCharacter::TryPickupItem);
-	PlayerInputComponent->BindAction("DropItem", IE_Pressed, this, &ADGPlayerCharacter::DropItem);
-	PlayerInputComponent->BindAction("ThrowItem", IE_Pressed, this, &ADGPlayerCharacter::ChargeThrow);
-	PlayerInputComponent->BindAction("ThrowItem", IE_Released, this, &ADGPlayerCharacter::ReleaseThrow);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ADGPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ADGPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	// TryPickupItem must be bond before ReleaseThrow
+	PlayerInputComponent->BindAction("TryPickupItem", IE_Released, this, &ADGPlayerCharacter::TryPickupItem);
+	PlayerInputComponent->BindAction("DropItem", IE_Released, this, &ADGPlayerCharacter::DropItem);
+	PlayerInputComponent->BindAction("ThrowItem", IE_Pressed, this, &ADGPlayerCharacter::ChargeThrow);
+	PlayerInputComponent->BindAction("ThrowItem", IE_Released, this, &ADGPlayerCharacter::ReleaseThrow);
 }
 
 void ADGPlayerCharacter::MoveForward(const float Value)
@@ -59,28 +60,6 @@ void ADGPlayerCharacter::MoveRight(const float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
-}
-
-void ADGPlayerCharacter::ChargeThrow()
-{
-	if (IsHoldingItem())
-	{
-		GetWorldTimerManager().SetTimer(ChargeThrowTimerHandle, this, &ADGPlayerCharacter::ReleaseThrow, ItemThrowMaxChargeTime, false);
-	}
-}
-
-void ADGPlayerCharacter::ReleaseThrow()
-{
-	if (!IsHoldingItem() || !GetWorldTimerManager().IsTimerActive(ChargeThrowTimerHandle))
-	{
-		return;
-	}
-
-	const float ElapsedPercentTime = GetWorldTimerManager().GetTimerElapsed(ChargeThrowTimerHandle) / ItemThrowMaxChargeTime;
-	GetWorldTimerManager().ClearTimer(ChargeThrowTimerHandle);
-
-	const float ResultForce = FMath::Lerp(ItemMinThrowForce, ItemMaxThrowForce, ElapsedPercentTime);
-	ThrowItem(ResultForce);
 }
 
 void ADGPlayerCharacter::TryPickupItem()
@@ -117,4 +96,27 @@ void ADGPlayerCharacter::TryPickupItem()
 	}
 
 	PickupItem(HitItem);
+}
+
+
+void ADGPlayerCharacter::ChargeThrow()
+{
+	if (IsHoldingItem())
+	{
+		GetWorldTimerManager().SetTimer(ChargeThrowTimerHandle, this, &ADGPlayerCharacter::ReleaseThrow, ItemThrowMaxChargeTime, false);
+	}
+}
+
+void ADGPlayerCharacter::ReleaseThrow()
+{
+	if (!IsHoldingItem() || !GetWorldTimerManager().IsTimerActive(ChargeThrowTimerHandle))
+	{
+		return;
+	}
+
+	const float ElapsedPercentTime = GetWorldTimerManager().GetTimerElapsed(ChargeThrowTimerHandle) / ItemThrowMaxChargeTime;
+	GetWorldTimerManager().ClearTimer(ChargeThrowTimerHandle);
+
+	const float ResultForce = FMath::Lerp(ItemMinThrowForce, ItemMaxThrowForce, ElapsedPercentTime);
+	ThrowItem(ResultForce);
 }
