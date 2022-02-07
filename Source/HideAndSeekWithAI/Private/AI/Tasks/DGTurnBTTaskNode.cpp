@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/DGTurnBTTaskNode.h"
+#include "AI/Tasks//DGTurnBTTaskNode.h"
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -16,7 +16,7 @@ UDGTurnBTTaskNode::UDGTurnBTTaskNode()
 	TurnSpeedDeviation = 0.f;
 	TurnAngleDeviation = 0.f;
 
-	// Пытался использовать NodeMemory, но видимо из-за размера в uint8 память не смогла поместить в себя 4 параметра и поэтому
+	// Пытался использовать NodeMemory, но видимо из-за своего размера память не смогла поместить в себя 4 параметра и поэтому
 	// периодически крашила игру при запуске (при чём не смотря на null-check!).
 	bCreateNodeInstance = true;
 }

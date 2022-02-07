@@ -14,6 +14,12 @@ class HIDEANDSEEKWITHAI_API AItem : public AActor
 public:
 	AItem();
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetSpawnLocation() const { return SpawnLocation; }
+
+	UFUNCTION(BlueprintCallable)
+	bool IsOnSpawn() const { return bIsOnSpawn; }
+
 	void Attach(UStaticMeshComponent* Parent, const FName& SocketName);
 	void Detach();
 	void AddImpulse(float Force) const;
@@ -21,4 +27,11 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector SpawnLocation;
+
+	bool bIsOnSpawn;
+
+	virtual void BeginPlay() override;
 };

@@ -14,6 +14,11 @@ AItem::AItem()
 	StaticMeshComponent->SetSimulatePhysics(true);
 }
 
+void AItem::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AItem::Attach(UStaticMeshComponent* Parent, const FName& SocketName)
 {
 	// Important to disable before attachment
