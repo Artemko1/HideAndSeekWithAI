@@ -17,11 +17,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FVector GetSpawnLocation() const { return SpawnLocation; }
 
-	UFUNCTION(BlueprintCallable)
-	bool IsOnSpawn() const { return bIsOnSpawn; }
-
-	void Attach(UStaticMeshComponent* Parent, const FName& SocketName);
-	void Detach();
+	bool Attach(UStaticMeshComponent* Parent, const FName& SocketName);
+	bool Detach(AController* InstigatorController);
 	void AddImpulse(float Force) const;
 
 protected:
@@ -31,7 +28,19 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	FVector SpawnLocation;
 
-	bool bIsOnSpawn;
+	// Я хотел сделать дополнительную проверку, чтобы боты не брали кубы, которые меньше чем в метре от своего спауна.
+	// Без неё боты в теории могут взять не тот куб, если несколько кубов скидать вместе.
+	// Но решил, что вовершенствовать задание бесконечно можно, но и без этой фичи будет норм.
+	// bool bIsOnSpawn;
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintPure)
+	bool IsDroppedByPlayer() const { return bIsDroppedByPlayer; }
+
+private:
+	// Нужна проверка для того, чтобы нельзя было выхватить предмет из рук у бота.
+	bool IsAttached = false;
+
+	bool bIsDroppedByPlayer = false;
 };

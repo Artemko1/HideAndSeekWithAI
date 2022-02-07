@@ -37,8 +37,11 @@ void ADGCharacter::PickupItem(AItem* Item)
 		return;
 	}
 
-	Item->Attach(StaticMeshComponent, ItemSocketName);
-	HeldItem = Item;
+	const bool Success = Item->Attach(StaticMeshComponent, ItemSocketName);
+	if (Success)
+	{
+		HeldItem = Item;
+	}
 }
 
 void ADGCharacter::DropItem()
@@ -48,8 +51,11 @@ void ADGCharacter::DropItem()
 		return;
 	}
 
-	HeldItem->Detach();
-	HeldItem = nullptr;
+	const bool Success = HeldItem->Detach(GetController());
+	if (Success)
+	{
+		HeldItem = nullptr;
+	}
 }
 
 void ADGCharacter::ThrowItem(const float Force)
@@ -59,9 +65,23 @@ void ADGCharacter::ThrowItem(const float Force)
 		return;
 	}
 
-	HeldItem->Detach();
-	HeldItem->AddImpulse(Force);
-	HeldItem = nullptr;
+	const bool Success = HeldItem->Detach(GetController());
+	if (Success)
+	{
+		HeldItem->AddImpulse(Force);
+		HeldItem = nullptr;
+	}
+}
+
+bool ADGCharacter::GetItemSpawnLocation(FVector& OutLocation) const
+{
+	if (!HeldItem)
+	{
+		return false;
+	}
+
+	OutLocation = HeldItem->GetSpawnLocation();
+	return true;
 }
 
 void ADGCharacter::SetMaxSpeed() const

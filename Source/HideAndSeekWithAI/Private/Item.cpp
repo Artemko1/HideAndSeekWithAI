@@ -19,17 +19,34 @@ void AItem::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AItem::Attach(UStaticMeshComponent* Parent, const FName& SocketName)
+bool AItem::Attach(UStaticMeshComponent* Parent, const FName& SocketName)
 {
+	if (IsAttached)
+	{
+		return false;
+	}
+
 	// Important to disable before attachment
 	StaticMeshComponent->SetSimulatePhysics(false);
 	AttachToComponent(Parent, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SocketName);
+	IsAttached = true;
+	return true;
 }
 
-void AItem::Detach()
+bool AItem::Detach(AController* InstigatorController)
 {
+	if (!IsAttached)
+	{
+		return false;
+	}
+
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	StaticMeshComponent->SetSimulatePhysics(true);
+	IsAttached = false;
+
+	bIsDroppedByPlayer = InstigatorController != nullptr && InstigatorController->IsPlayerController() ? true : false;
+
+	return true;
 }
 
 void AItem::AddImpulse(const float Force) const

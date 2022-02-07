@@ -24,7 +24,6 @@ ADGAICharacter::ADGAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 
 	check(GetCharacterMovement())
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	GetCharacterMovement()->RotationRate = FRotator{0.f, 200.f, 0.f};
 }
 
 void ADGAICharacter::Tick(float DeltaTime)

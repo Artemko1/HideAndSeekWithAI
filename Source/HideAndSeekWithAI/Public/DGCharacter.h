@@ -51,6 +51,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	bool IsHoldingItem() const { return HeldItem != nullptr; }
 
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	bool GetItemSpawnLocation(FVector& OutLocation) const;
+
 	void SetMaxSpeed() const;
 
 private:
