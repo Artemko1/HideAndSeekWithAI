@@ -21,7 +21,6 @@ class HIDEANDSEEKWITHAI_API ADGCharacter : public ACharacter, public IGenericTea
 public:
 	explicit ADGCharacter(const FObjectInitializer& ObjectInitializer);
 
-
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 	UStaticMeshComponent* StaticMeshComponent;
@@ -32,16 +31,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override
-	{
-		TeamId = TeamID;
-	}
-
-	virtual FGenericTeamId GetGenericTeamId() const override
-	{
-		return TeamId;
-	}
-
+	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override { TeamId = TeamID; }
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	void PickupItem(AItem* Item);
@@ -58,14 +49,17 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	bool GetItemSpawnLocation(FVector& OutLocation) const;
 
-	void SetMaxSpeed() const;
+	void SetMaxSpeed(float Speed) const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentSpeed() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetBaseSpeed() const { return BaseSpeed; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FGenericTeamId TeamId = FGenericTeamId::NoTeam;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-	float BaseSpeedMultiplier = 1.f;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Item")
 	AItem* HeldItem;

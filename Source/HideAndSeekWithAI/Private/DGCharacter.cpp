@@ -27,7 +27,7 @@ void ADGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetMaxSpeed();
+	SetMaxSpeed(BaseSpeed);
 }
 
 void ADGCharacter::PickupItem(AItem* Item)
@@ -84,10 +84,20 @@ bool ADGCharacter::GetItemSpawnLocation(FVector& OutLocation) const
 	return true;
 }
 
-void ADGCharacter::SetMaxSpeed() const
+void ADGCharacter::SetMaxSpeed(const float Speed) const
 {
 	if (GetCharacterMovement())
 	{
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * BaseSpeedMultiplier;
+		GetCharacterMovement()->MaxWalkSpeed = Speed;
 	}
+}
+
+float ADGCharacter::GetCurrentSpeed() const
+{
+	if (GetCharacterMovement())
+	{
+		return GetCharacterMovement()->MaxWalkSpeed;
+	}
+
+	return -1.f;
 }

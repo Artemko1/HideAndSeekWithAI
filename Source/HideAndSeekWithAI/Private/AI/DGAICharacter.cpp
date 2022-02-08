@@ -12,6 +12,7 @@ ADGAICharacter::ADGAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Чек возможно глупый, но я добавил их везде, когда искал причину краша (причина была в DGTurnBTTaskNode, там описано)
 	check(GetCapsuleComponent())
 	GetCapsuleComponent()->InitCapsuleSize(25.f, 50.0f);
 
@@ -26,7 +27,24 @@ ADGAICharacter::ADGAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 }
 
-void ADGAICharacter::Tick(float DeltaTime)
+void ADGAICharacter::SetMovementMode(const EDGMovementSpeedMode DGMovementSpeedMode)
 {
-	Super::Tick(DeltaTime);
+	if (MovementMultipliers.Contains(DGMovementSpeedMode))
+	{
+		SetMaxSpeed(GetBaseSpeed() * MovementMultipliers[DGMovementSpeedMode]);
+	}
+	else
+	{
+		SetMaxSpeed(GetBaseSpeed());
+	}
+}
+
+void ADGAICharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (MovementMultipliers.Contains(EDGMovementSpeedMode::Default))
+	{
+		SetMaxSpeed(GetBaseSpeed() * MovementMultipliers[EDGMovementSpeedMode::Default]);
+	}
 }

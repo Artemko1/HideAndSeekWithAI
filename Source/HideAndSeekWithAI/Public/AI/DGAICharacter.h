@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DGCharacter.h"
+#include "DGCoreTypes.h"
 #include "DGAICharacter.generated.h"
 
 UCLASS()
@@ -14,5 +15,11 @@ class HIDEANDSEEKWITHAI_API ADGAICharacter : public ADGCharacter
 public:
 	explicit ADGAICharacter(const FObjectInitializer& ObjectInitializer);
 
-	virtual void Tick(float DeltaTime) override;
+	void SetMovementMode(EDGMovementSpeedMode DGMovementSpeedMode);
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Movement)
+	TMap<EDGMovementSpeedMode, float> MovementMultipliers;
+
+	virtual void BeginPlay() override;
 };
