@@ -11,10 +11,6 @@ UDGTurnBTTaskNode::UDGTurnBTTaskNode()
 {
 	NodeName = "TurnAround";
 	bNotifyTick = true;
-	TurnSpeed = 30.f;
-	TurnAngle = 90.f;
-	TurnSpeedDeviation = 0.f;
-	TurnAngleDeviation = 0.f;
 
 	// Пытался использовать NodeMemory, но видимо из-за своего размера память не смогла поместить в себя 4 параметра и поэтому
 	// периодически крашила игру при запуске (при чём не смотря на null-check!).

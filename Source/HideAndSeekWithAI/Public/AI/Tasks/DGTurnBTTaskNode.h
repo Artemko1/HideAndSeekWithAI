@@ -21,17 +21,17 @@ protected:
 private:
 	/** in degrees per second */
 	UPROPERTY(Category = LookAround, EditAnywhere, meta = (ClampMin = "0.0", UIMin = "0.0", ClampMax = "360.0", UIMax = "360.0"))
-	float TurnSpeed;
+	float TurnSpeed = 30.f;
 
 	UPROPERTY(Category = LookAround, EditAnywhere, meta = (UIMin = 0, ClampMin = 0))
-	float TurnSpeedDeviation;
+	float TurnSpeedDeviation = 0.f;
 
 	/** in degrees */
 	UPROPERTY(Category = LookAround, EditAnywhere, meta = (ClampMin = "0.0", UIMin = "0.0", ClampMax = "360.0", UIMax = "360.0"))
-	float TurnAngle;
+	float TurnAngle = 90.f;
 
 	UPROPERTY(Category = LookAround, EditAnywhere, meta = (UIMin = 0, ClampMin = 0))
-	float TurnAngleDeviation;
+	float TurnAngleDeviation = 0.f;
 
 	UPROPERTY(Category = LookAround, EditAnywhere)
 	bool IsRandomDirection = true;
