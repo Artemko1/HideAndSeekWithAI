@@ -7,6 +7,9 @@
 #include "DGFindEnemyBTService.generated.h"
 
 
+/* Этот класс НЕ используется. Я оставил этот файл только чтобы побольше показать как я делал задание.
+ * Логика этого сервиса перенесена в блупринт DGAIController и подвязана на ивенты восприятия, чтобы бот реагировал мгновенно, а не тиками.
+ */
 UCLASS()
 class HIDEANDSEEKWITHAI_API UDGFindEnemyBTService : public UBTService
 {

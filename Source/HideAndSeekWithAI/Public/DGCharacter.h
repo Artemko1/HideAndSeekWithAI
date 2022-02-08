@@ -9,6 +9,10 @@
 #include "DGCharacter.generated.h"
 
 class UCameraComponent;
+
+// IGenericTeamAgentInterface имплементился, потому что сначала хотел сделать видимость игроков на нём (чтобы других ботов не видел).
+// Но поскольку по итогу сделал поиск игрока через Cast к DGPlayerCharacter, то система команд в принципе стала не нужна больше.
+// Оставил, чтобы показать процесс решения ТЗ.
 UCLASS()
 class HIDEANDSEEKWITHAI_API ADGCharacter : public ACharacter, public IGenericTeamAgentInterface
 {

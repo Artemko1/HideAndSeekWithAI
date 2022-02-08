@@ -8,9 +8,10 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 
+// Класс НЕ используется, почему - написано в .h файле
 UDGFindEnemyBTService::UDGFindEnemyBTService()
 {
-	NodeName = "Find Enemy";
+	NodeName = "DEPRECATEDFind Enemy";
 }
 
 void UDGFindEnemyBTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -24,25 +25,14 @@ void UDGFindEnemyBTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 		return;
 	}
 
-	const auto Pawn = AIController->GetPawn();
 	const auto PerceptionComponent = Cast<UDGAIPerceptionComponent>(AIController->GetAIPerceptionComponent());
-	if (!PerceptionComponent || !Pawn)
+	if (!PerceptionComponent)
 	{
 		return;
 	}
 
 	TArray<AActor*> HostileActors;
 	PerceptionComponent->GetHostileActors(HostileActors);
-
-	//todo remove debug code
-	for (const auto HostileActor : HostileActors)
-	{
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Cyan,
-										 FString::Printf(TEXT("%s sees %s"), *Pawn->GetName(), *HostileActor->GetName()));
-		}
-	}
 
 	AActor* Enemy = nullptr;
 	if (HostileActors.Num() >= 1)
@@ -55,6 +45,9 @@ void UDGFindEnemyBTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	{
 		// Возможно последнюю позицию можно доставать из ивента OnTargetPerceptionUpdated, а не перезаписывать в Тике,
 		// но я решил сделать способом попроще.
+		
+		// По итогу всё же перенёс логику
+		
 		Blackboard->SetValueAsVector(EnemyLastSeenLocationKey.SelectedKeyName, Enemy->GetActorLocation());
 	}
 }
