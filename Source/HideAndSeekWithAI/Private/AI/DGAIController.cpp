@@ -23,16 +23,20 @@ void ADGAIController::BeginPlay()
 	Super::BeginPlay();
 
 	RunBehaviorTree(BTAsset);
+}
 
-	if (GetBlackboardComponent() && GetPawn())
+void ADGAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (!InPawn) return;
+
+	if (SpawnBBKeyName.IsNone())
 	{
-		if (SpawnBBKeyName.IsNone())
-		{
-			UE_LOG(LogDGAIController, Warning, TEXT("SpawnBBKeyName is set to None"));
-		}
-
-		GetBlackboardComponent()->SetValueAsVector(SpawnBBKeyName, GetPawn()->GetActorLocation());
+		UE_LOG(LogDGAIController, Warning, TEXT("SpawnBBKeyName is set to None"));
 	}
+
+	GetBlackboardComponent()->SetValueAsVector(SpawnBBKeyName, InPawn->GetActorLocation());
 }
 
 ETeamAttitude::Type ADGAIController::GetTeamAttitudeTowards(const AActor& Other) const
