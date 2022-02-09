@@ -80,7 +80,7 @@ void ADGPlayerCharacter::TryPickupItem()
 
 	FHitResult HitResult;
 	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(GetOwner());
+	CollisionParams.AddIgnoredActor(this);
 	GetWorld()->LineTraceSingleByChannel(HitResult, ViewLocation, TraceEnd, ECC_Visibility, CollisionParams);
 
 	if (!HitResult.bBlockingHit)

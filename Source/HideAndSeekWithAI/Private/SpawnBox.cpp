@@ -25,6 +25,7 @@ void ASpawnBox::InitializeBounds()
 	if (IsInitialized) { return; }
 	IsInitialized = true;
 
+	Index++;
 	PrevValue = FVector2D(FMath::FRand(), FMath::FRand());
 
 	const FVector Loc = GetActorLocation();
@@ -35,13 +36,14 @@ void ASpawnBox::InitializeBounds()
 	YBoxLocationVector = FVector2D(Loc.Y - Extent.Y, Loc.Y + Extent.Y);
 }
 
-FVector2D ASpawnBox::GetNextRandomPoint2D(const int32 Index)
+FVector2D ASpawnBox::GetNextRandomPoint2D()
 {
 	if (!IsInitialized) return FVector2D();
 
 	const float NextX = UImportanceSamplingLibrary::NextSobolFloat(Index, 1, PrevValue.X);
 	const float NextY = UImportanceSamplingLibrary::NextSobolFloat(Index, 2, PrevValue.Y);
 
+	Index++;
 	PrevValue.X = NextX;
 	PrevValue.Y = NextY;
 

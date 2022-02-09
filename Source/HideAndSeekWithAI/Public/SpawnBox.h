@@ -26,7 +26,7 @@ protected:
 	void InitializeBounds();
 
 	UFUNCTION(BlueprintCallable)
-	FVector2D GetNextRandomPoint2D(int Index);
+	FVector2D GetNextRandomPoint2D();
 
 private:
 	/// 0-1 range
@@ -37,4 +37,5 @@ private:
 	FVector2D YBoxLocationVector;
 
 	bool IsInitialized = false;
+	int Index = 0;
 };
