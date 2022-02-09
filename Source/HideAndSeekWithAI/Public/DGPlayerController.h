@@ -10,4 +10,5 @@ UCLASS()
 class HIDEANDSEEKWITHAI_API ADGPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+	// Подобные классы создаю заранее, потому что сначала неизвестно, понадобятся ли, а потом будет дольше везде заменять
 };

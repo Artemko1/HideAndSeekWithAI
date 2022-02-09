@@ -38,7 +38,10 @@ void ASpawnBox::InitializeBounds()
 
 FVector2D ASpawnBox::GetNextRandomPoint2D()
 {
-	if (!IsInitialized) return FVector2D();
+	if (!IsInitialized)
+	{
+		return FVector2D();
+	}
 
 	const float NextX = UImportanceSamplingLibrary::NextSobolFloat(Index, 1, PrevValue.X);
 	const float NextY = UImportanceSamplingLibrary::NextSobolFloat(Index, 2, PrevValue.Y);

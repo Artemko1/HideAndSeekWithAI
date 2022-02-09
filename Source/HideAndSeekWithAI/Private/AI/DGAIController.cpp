@@ -29,7 +29,10 @@ void ADGAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	if (!InPawn) return;
+	if (!InPawn)
+	{
+		return;
+	}
 
 	if (SpawnBBKeyName.IsNone())
 	{
