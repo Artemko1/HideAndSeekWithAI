@@ -1,5 +1,5 @@
 # HideAndSeekWithAI
-Developed with Unreal Engine 4
+Developed with Unreal Engine 4.26.2
 
 Test task for UE developer vacancy.
 Playable build can be downloaded here: https://artemko1.itch.io/hns
